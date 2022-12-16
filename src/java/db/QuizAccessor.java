@@ -17,7 +17,7 @@ import java.util.List;
 public class QuizAccessor {
     private static Connection conn = null;
     private static PreparedStatement selectAllStatement = null;
-    private static PreparedStatement deleteStatement = null;
+    private static PreparedStatement pointsStatement = null;
     private static PreparedStatement insertStatement = null;
     private static PreparedStatement updateStatement = null;
     
@@ -30,9 +30,7 @@ public class QuizAccessor {
         if (conn != null)
             try{
                 selectAllStatement = conn.prepareStatement("select * from quiz");
-                deleteStatement = conn.prepareStatement("delete from employees where emp_no = ?");
-                insertStatement = conn.prepareStatement("insert into employees values (?,?,?,?,?,?)");
-                updateStatement = conn.prepareStatement("update employees set birth_date = ?, first_name = ?, last_name = ?, gender = ?, hire_date = ? where emp_no = ?");
+                pointsStatement = conn.prepareStatement("select points from QuizQuestion where quizID = ?");
                 return true;
             }catch(SQLException ex){
                 System.err.println("************************");
@@ -78,8 +76,23 @@ public class QuizAccessor {
         return quizzes;
     }
     
-    private static List<Number> getPointsForQuiz(String quizID){
+    private static List<Number> getPointsForQuiz(String quizID)throws SQLException{
         List<Number> points = new ArrayList();
+         ResultSet rs;
+        try{
+            init();
+            pointsStatement.setString(1,quizID);
+            rs =  pointsStatement.executeQuery();
+            while(rs.next()){
+                points.add(rs.getInt("points"));
+            }
+        }catch(SQLException ex){
+            System.err.println("************************");
+            System.err.println("** Error retreiving Employees");
+            System.err.println("** " + ex.getMessage());
+            System.err.println("************************");
+            return points; 
+        }
         return points;
     }
 }

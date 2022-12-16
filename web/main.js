@@ -13,10 +13,10 @@ window.onload = function () {
         document.querySelector("#quizTagsSelect").addEventListener("change", addToTags);
         document.querySelector("#refresh").addEventListener("click", getAllQuizes);
         getUser();
+        getAllQuizes();
         getCatergories();
-    }else if(window.location.href.indexOf("quiz")> -1){
-
     }
+    getAllQuizes();
 
 
 };
@@ -163,11 +163,10 @@ function buildTable(text) {
     clearTable();
     //console.log(text);
     let arr = JSON.parse(text);
-    //console.log(arr);
+    console.log(arr);
     // get JS Objects
     let theTable = document.querySelector("table");
     let html = theTable.querySelector("tr").innerHTML;
-    let user = JSON.parse(userobj);
     for (let i = 0; i < arr.length; i++) {
         let row = arr[i];
         allQuizzes.push(arr[i]);
@@ -175,19 +174,15 @@ function buildTable(text) {
         html += "<td>" + row.quizID + "</td>";
         html += "<td>" + row.quizTitle + "</td>";
         html += "<td>" + row.questions.length + "</td>";
-        if(user.permissionLevel === "GUEST"){
-            html += "<td>Login To Use</td>";
-        }else{
-            html += "<td><form action='quiz/takeQuiz.php'><input type='hidden' name='permissionlevel' value='"+user.permissionLevel+"'><input type='hidden' name='username' value='"+user.username+"'><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>";
-        }
+        html += "<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>";
+        
         html += "</tr>";
     }
     //console.log(allQuizzes);
 
     theTable.innerHTML = html;
-    if(user.permissionLevel === "USER" || user.permissionLevel === "ADMIN"){
-        document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
-    }
+    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
+    
 }
 
 function addToTags(){

@@ -3,6 +3,7 @@ package db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import com.mysql.jdbc.Driver;
 
 public class ConnectionManager {
 
@@ -16,6 +17,7 @@ public class ConnectionManager {
     static Connection getConnection(String url, String user, String password) throws SQLException {
         if (conn == null) {
             try {
+               //Class.forName("com.mysql.jdbc.Driver"); 
             conn = DriverManager.getConnection(url, user, password);
             }
             catch (SQLException ex)
