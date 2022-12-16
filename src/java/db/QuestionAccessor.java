@@ -40,7 +40,7 @@ public class QuestionAccessor {
         return false;
     }
     
-    public static List<Question> getQuestionsForQuiz() throws SQLException{
+    public static List<Question> getQuestionsForQuiz(String quizID) throws SQLException{
         List<Question> emps = new ArrayList();
         if(!init())
             return emps;
