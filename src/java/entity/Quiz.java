@@ -1,13 +1,15 @@
 package entity;
 
+import java.util.List;
+
 
 public class Quiz {
     private String quizID;
     private String  quizTitle;
-    private Question[]  questions; // array of Question objects
-    private int[]  points;
+    private List<Question>  questions; // array of Question objects
+    private List<Number> points;
     
-    public Quiz(String quizID,String quizTitle,Question[] questions,int[] points){
+    public Quiz(String quizID,String quizTitle,List<Question> questions,List<Number> points){
         this.quizID =quizID;
         this.quizTitle =quizTitle;
         this.questions =questions;
@@ -21,11 +23,11 @@ public class Quiz {
         return quizTitle;
     }
 
-    public Question[] getQuestions(){
+    public List<Question> getQuestions(){
         return questions;
     }
 
-    public int[] getPoints(){
+    public List<Number> getPoints(){
         return points;
     }
 }

@@ -1,13 +1,15 @@
 package entity;
 
+import java.util.List;
+
 public class Question {
     private String questionID;
     private String questionText;
-    private String[] choices;
+    private List<String> choices;
     private int answer;
     private String[] tags;
     
-    public Question(String questionID,String questionText,String[] choices, int answer,String[] tags){
+    public Question(String questionID,String questionText, List<String> choices, int answer,String[] tags){
         this.questionID =questionID;
         this.questionText =questionText;
         this.choices =choices;
@@ -20,7 +22,7 @@ public class Question {
     public String getQuestionText(){
         return questionText;
     }
-    public String[] getChoices(){
+    public  List<String> getChoices(){
         return choices;
     }
     public int getAnswer(){

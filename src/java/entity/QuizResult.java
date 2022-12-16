@@ -1,16 +1,18 @@
 package entity;
 
+import java.util.List;
+
 public class QuizResult {
     private String resultID;
     private Quiz quiz;
     private User user; // 
-    private int[] answers; //int[]
+    private List<Number> answers; //int[]
     private String startTime;
     private String endTime;
     private int scoreNumerator;
     private int scoreDenominator;
 
-    public QuizResult(String resultID, Quiz quiz, User user,  int[] answers,String startTime, String endTime, int scoreNumerator, int scoreDenominator) {
+    public QuizResult(String resultID, Quiz quiz, User user, List<Number> answers,String startTime, String endTime, int scoreNumerator, int scoreDenominator) {
         this.resultID = resultID;
         this.quiz = quiz;
         this.user = user;
@@ -41,7 +43,7 @@ public class QuizResult {
         return endTime;
     }
 
-    public int[] getUserAnswers(){
+    public List<Number> getUserAnswers(){
         return answers;
     }
 
