@@ -3,10 +3,10 @@ package entity;
 import java.util.List;
 
 public class Question {
-    private String questionID;
-    private String questionText;
-    private String[] choices;
-    private int answer;
+    private final String questionID;
+    private final String questionText;
+    private final String[] choices;
+    private final int answer;
     
     public Question(String questionID,String questionText, String[] choices, int answer){
         this.questionID =questionID;

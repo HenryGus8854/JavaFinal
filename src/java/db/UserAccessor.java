@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import entity.Question;
+import entity.Quiz;
 import entity.User;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -37,10 +38,53 @@ public class UserAccessor {
             }
         return false;
     }
+
+    public static ArrayList<User> getAllUsers() throws SQLException{
+        ArrayList<User> allUsers = new ArrayList<>();
+        if(!init()) return allUsers;
+
+        ResultSet rs;
+        try{
+            rs = selectAllStatement.executeQuery();
+        } catch(SQLException ex){
+            System.err.println("************************");
+            System.err.println("** Error retreiving Employees");
+            System.err.println("** " + ex.getMessage());
+            System.err.println("************************");
+            return allUsers;
+        }
+
+        try {
+            while (rs.next()) {
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+
+                User user = new User(username, password);
+                allUsers.add(user);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("************************");
+            System.err.println("** Error populating Employees");
+            System.err.println("** " + ex.getMessage());
+            System.err.println("************************");
+        }
+        return allUsers;
+    }
+
+    public static boolean validateUser(User user) throws SQLException {
+        ArrayList<User> allUsers = getAllUsers();
+
+        for (User userInDB : allUsers) {
+            if (userInDB.getUsername().equals(user.getUsername()))
+                return userInDB.getPassword().equals(user.getPassword());
+        }
+        return false;
+    }
     
     
     public static boolean ValidateUser(User user) throws SQLException{
-        List<User> users = new ArrayList();
+        List<User> users = new ArrayList<>();
         if(!init())
             return false;
         ResultSet rs;
@@ -60,9 +104,9 @@ public class UserAccessor {
                 User  usertemp = new User(username, password);
                 users.add(usertemp);
             }
-            for(int i = 0; i<users.size();i++){
-                if(users.get(i).getUsername().equals(user.getUsername())){
-                    return users.get(i).getPassword().equals(user.getPassword());
+            for (User userInDB : users) {
+                if (userInDB.getUsername().equals(user.getUsername())) {
+                    return userInDB.getPassword().equals(user.getPassword());
                 }
             }
         } catch (SQLException ex) {

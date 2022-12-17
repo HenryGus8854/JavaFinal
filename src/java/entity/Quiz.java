@@ -4,10 +4,10 @@ import java.util.List;
 
 
 public class Quiz {
-    private String quizID;
-    private String  quizTitle;
-    private List<Question>  questions; // array of Question objects
-    private List<Number> points;
+    private final String quizID;
+    private final String  quizTitle;
+    private final List<Question>  questions; // array of Question objects
+    private final List<Number> points;
     
     public Quiz(String quizID,String quizTitle,List<Question> questions,List<Number> points){
         this.quizID =quizID;
