@@ -1,6 +1,9 @@
 let allQuizzes =[];
 let userobj;
 let quizBeingTaken;
+var globalVariable={
+       quizBeingTaken: quizBeingTaken
+    };
 window.onload = function () {
     // will only work in the index page
     // if (window.location.href.indexOf("index") > -1)
@@ -104,34 +107,6 @@ function validatePasswords(event) {
 
 //TODO: filter on the backend
 
-function getCatergories(){
-    let url="quizapp/catergory";
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            let resp = xmlhttp.responseText;
-            //console.log(resp);
-            if (resp.search("ERROR") >= 0) {
-                alert("oh no, something is wrong with the GET ...");
-            } else {
-                //buildTable(resp);
-                let select = document.getElementById("quizTagsSelect");
-                let html = select.innerHTML;
-                let arr = JSON.parse(resp);
-                html+="<option>Choose a tag</option>";
-                for(let i = 0; i < arr.length; i++){
-                    let row = arr[i];
-                    html+="<option value='"+row.tagName+"'>"+row.tagName.split('::')[1]+"</option>";
-                    //console.log(row);
-                }
-                select.innerHTML =html;
-            }
-        }
-    };
-    console.log(url);
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
 
 function getAllQuizes(){
     let url = "quizapp/quizzes"; // file name or server-side process name
@@ -171,14 +146,14 @@ function buildTable(text) {
         html += "<td>" + row.quizID + "</td>";
         html += "<td>" + row.quizTitle + "</td>";
         html += "<td>" + row.questions.length + "</td>";
-        html += "<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>";
+        html += "<td><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></td>";
         
         html += "</tr>";
     }
     console.log(allQuizzes);
 
     theTable.innerHTML = html;
-    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
+    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz);
     
 }
 
@@ -250,18 +225,33 @@ function getQuizzesByTag(){
 function takeQuiz(e){
    let parent =  e.target.parentElement;
    let input = parent.firstChild.valueOf();
-   //console.log(input.value);
+   console.log(input.value);
    //console.log(allQuizzes);
    for(let i = 0; i<allQuizzes.length; i++){
        if(allQuizzes[i].quizID === input.value){
-           console.log(allQuizzes[i].quizID);
+           //console.log(allQuizzes[i].quizID);
            quizBeingTaken = allQuizzes[i];
-
+           saveQuiz();
        }
    }
-    console.log(quizBeingTaken);
+   console.log(quizBeingTaken);
 }
 
-function buildQuiz(){
+function saveQuiz(){
+let url = "CurrentQuiz"; // file name or server-side process name
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let resp = xmlhttp.responseText;
+            console.log("-->"+resp);
+            if (resp.search("ERROR") >= 0) {
+                alert("Something is wrong with the GET.");
+            } else {
+                
+            }
 
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send(quizBeingTaken);
 }

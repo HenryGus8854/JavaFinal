@@ -29,8 +29,7 @@
             
             <div class="d-flex" role="search">
                 <div class="form-floating">
-                    <select class="form-select" id="quizTagsSelect" aria-label="Floating label select example">
-                    </select>
+                    <input type="text" pattern="^QN-[0-9]{4}$" title="Serach by Quiz ID" class="form-control">
                     <label for="quizTagsSelect">Search for a Quiz</label>
                 </div>
                 <button class="btn btn-outline-success" type="button" id="searchByTagButton">Search</button>
@@ -38,11 +37,7 @@
         </div>
     </div>
 </nav>
-<div class="d-flex justify-content-end"  id="tagSearch">
 
-    <p id="tagLabel">Search by these Tags:</p>
-    <p id="tags"></p>
-</div>
 <h3 class="text-center my-5">Quizzes</h3>
 <button id="refresh" class="btn btn-outline-success mx-5">Refresh Table</button>
 <table class="table table-striped table-hover container mt-5 w-75">

@@ -11,20 +11,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Henry
+ * @author hgush
  */
-@WebServlet(name = "QuizService", urlPatterns = {"/quizapp/quizzes"})
-public class QuizService extends HttpServlet {
+@WebServlet(name = "CurrentQuiz", urlPatterns = {"/CurrentQuiz"})
+public class CurrentQuiz extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,15 +57,7 @@ public class QuizService extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        System.out.println("Triggered");
-        try (PrintWriter out = response.getWriter()) {
-            List<Quiz> allQuizzes= QuizAccessor.getAllQuizzes();
-            System.out.println(allQuizzes);
-            Gson g = new Gson();
-            out.println(g.toJson(allQuizzes));
-        } catch (SQLException ex) {
-            Logger.getLogger(QuizService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     /**
@@ -76,7 +71,25 @@ public class QuizService extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            System.out.println("POST REQUEST");
+        //processRequest(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            HttpSession session = request.getSession();
+            Scanner sc = new Scanner(request.getReader());
+            String jsonData = sc.nextLine(); // payload is a single string
+            
+            Gson g = new Gson();
+            Quiz quiz = g.fromJson(jsonData, Quiz.class);
+            System.out.println(quiz);
+            session.setAttribute("currentQuiz", quiz);    
+        String path = "/takeQuiz.html";
+        
+
+
+        RequestDispatcher rd = request.getRequestDispatcher(path);
+        rd.forward(request, response);   
+            boolean success = true;
+            out.println(success);
+        }
     }
 
     /**

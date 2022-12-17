@@ -5,7 +5,7 @@ package db;
  */
 public class ConnectionParameters {
  
-    public static final String URL = "jdbc:derby://localhost:1527/QUizAppDb";
+    public static final String URL = "jdbc:derby://localhost:1527/QuizAppDb";
     public static final String USERNAME = "app";
     public static final String PASSWORD = "app";
     
