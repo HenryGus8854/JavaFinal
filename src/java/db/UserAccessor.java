@@ -75,6 +75,7 @@ public class UserAccessor {
     public static boolean validateUser(User user) throws SQLException {
         ArrayList<User> allUsers = getAllUsers();
 
+
         for (User userInDB : allUsers) {
             if (userInDB.getUsername().equals(user.getUsername()))
                 return userInDB.getPassword().equals(user.getPassword());

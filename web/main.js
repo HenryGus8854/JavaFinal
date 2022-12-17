@@ -7,10 +7,12 @@ window.onload = function () {
     //     document.querySelector("#logInButton").addEventListener("click", login);
     //password checking on sign up
     if(window.location.href.indexOf("login")> -1){
-        document.querySelector("#searchByTagButton").addEventListener("click", getQuizzesByTag);
+        // document.querySelector("#searchByTagButton").addEventListener("click", getQuizzesByTag);
         document.querySelector("#loginButton").addEventListener("change", login);
     }else{
         document.querySelector("#refresh").addEventListener("click", getAllQuizes);
+        document.querySelector("#searchByTagButton").addEventListener("click", filterTableByTitle);
+
         getUser();
         getAllQuizes();
         getCatergories();
@@ -143,7 +145,9 @@ function getAllQuizes(){
             if (resp.search("ERROR") >= 0) {
                 alert("oh no, something is wrong with the GET ...");
             } else {
-                buildTable(resp);
+                // buildTable(resp);
+                allQuizzes = JSON.parse(resp);
+                buildTableBody(JSON.parse(resp));
             }
         }
     };
@@ -153,35 +157,58 @@ function getAllQuizes(){
 }
 function clearTable(){
     let theTable = document.querySelector("table");
-    let html = theTable.querySelector("tr").innerHTML;
-    theTable.innerHTML = html;
+    theTable.innerHTML = theTable.querySelector("tr").innerHTML;
 }
-function buildTable(text) {
+// function buildTable(text) {
+//     clearTable();
+//     //console.log(text);
+//     let arr = JSON.parse(text);
+//     //console.log(arr);
+//     // get JS Objects
+//     let theTable = document.querySelector("table");
+//     let html = theTable.querySelector("tr").innerHTML;
+//     for (let i = 0; i < arr.length; i++) {
+//         let row = arr[i];
+//         allQuizzes.push(arr[i]);
+//         html += "<tr id = '"+row.quizID+"'>";
+//         html += "<td>" + row.quizID + "</td>";
+//         html += "<td>" + row.quizTitle + "</td>";
+//         html += "<td>" + row.questions.length + "</td>";
+//         html += "<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>";
+//
+//         html += "</tr>";
+//     }
+//     console.log(allQuizzes);
+//
+//     theTable.innerHTML = html;
+//     document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
+//
+// }
+
+function buildTableBody(allQuizzes) {
     clearTable();
-    //console.log(text);
-    let arr = JSON.parse(text);
-    //console.log(arr);
-    // get JS Objects
-    let theTable = document.querySelector("table");
-    let html = theTable.querySelector("tr").innerHTML;
-    for (let i = 0; i < arr.length; i++) {
-        let row = arr[i];
-        allQuizzes.push(arr[i]);
-        html += "<tr id = '"+row.quizID+"'>";
-        html += "<td>" + row.quizID + "</td>";
-        html += "<td>" + row.quizTitle + "</td>";
-        html += "<td>" + row.questions.length + "</td>";
-        html += "<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='"+row.quizID+"'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>";
-        
-        html += "</tr>";
+    let tbody = document.querySelector("tbody");
+    let html = "";
+
+    for (let quiz of allQuizzes) {
+        html += `<tr id="${quiz.quizID}">`;
+            html += `<td>${quiz.quizID}</td>`;
+            html += `<td>${quiz.quizTitle}</td>`;
+            html += `<td>${quiz.questions.length}</td>`;
+            html += `<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='${quiz.quizID}'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>`;
+        html += `</tr>`;
     }
     console.log(allQuizzes);
-
-    theTable.innerHTML = html;
-    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
-    
+    tbody.innerHTML = html;
+    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz);
 }
 
+function filterTableByTitle() {
+    let userTitleInput = document.querySelector("#userTitleInput").value;
+    let regex =  new RegExp(userTitleInput);
+    let filteredArray = allQuizzes.filter( quiz => regex.test(quiz.quizTitle));
+    buildTableBody(filteredArray);
+}
 
 
 function buildFilteredTable() {
