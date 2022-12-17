@@ -5,13 +5,12 @@
 package controller;
 
 import com.google.gson.Gson;
-import db.QuizAccessor;
-import entity.Quiz;
+import db.UserAccessor;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.System.console;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -24,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Henry
  */
-@WebServlet(name = "QuizService", urlPatterns = {"/quizapp/quizzes"})
-public class QuizService extends HttpServlet {
+@WebServlet(name = "LoginService", urlPatterns = {"/LoginService"})
+public class LoginService extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,7 +38,7 @@ public class QuizService extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,16 +53,7 @@ public class QuizService extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        System.out.println("Triggered");
-        try (PrintWriter out = response.getWriter()) {
-            List<Quiz> allQuizzes= QuizAccessor.getAllQuizzes();
-            System.out.println(allQuizzes);
-            Gson g = new Gson();
-            out.println(g.toJson(allQuizzes));
-        } catch (SQLException ex) {
-            Logger.getLogger(QuizService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -77,8 +67,18 @@ public class QuizService extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            System.out.println("POST REQUEST");
+        try(PrintWriter out = response.getWriter()){
+            Scanner sc = new Scanner(request.getReader());
+            String jsonData = sc.nextLine(); // payload is a single string
+            Gson g = new Gson();
+            User user = g.fromJson(jsonData, User.class);
+            boolean success = UserAccessor.ValidateUser(user);
+            out.print(success);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
+        }   
     }
+        
 
     /**
      * Returns a short description of the servlet.

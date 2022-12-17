@@ -6,19 +6,16 @@ window.onload = function () {
     // if (window.location.href.indexOf("index") > -1)
     //     document.querySelector("#logInButton").addEventListener("click", login);
     //password checking on sign up
-    if (window.location.href.indexOf("signup") > -1 || window.location.href.indexOf("homepage") > -1)
-        document.querySelector("#SignInButton").addEventListener("click", validatePasswords);
-    else if(window.location.href.indexOf("index")> -1){
+    if(window.location.href.indexOf("login")> -1){
         document.querySelector("#searchByTagButton").addEventListener("click", getQuizzesByTag);
-        document.querySelector("#quizTagsSelect").addEventListener("change", addToTags);
+        document.querySelector("#loginButton").addEventListener("change", login);
+    }else{
         document.querySelector("#refresh").addEventListener("click", getAllQuizes);
         getUser();
         getAllQuizes();
         getCatergories();
     }
-    getAllQuizes();
-
-
+    
 };
 function getUser(){
     let url = "account/user"; // file name or server-side process name
@@ -163,7 +160,7 @@ function buildTable(text) {
     clearTable();
     //console.log(text);
     let arr = JSON.parse(text);
-    console.log(arr);
+    //console.log(arr);
     // get JS Objects
     let theTable = document.querySelector("table");
     let html = theTable.querySelector("tr").innerHTML;
@@ -178,40 +175,14 @@ function buildTable(text) {
         
         html += "</tr>";
     }
-    //console.log(allQuizzes);
+    console.log(allQuizzes);
 
     theTable.innerHTML = html;
     document.querySelector(".takeQuiz").addEventListener("click",takeQuiz)
     
 }
 
-function addToTags(){
-    let tag = document.querySelector("#quizTagsSelect").value;
-    let tagBar = document.getElementById("tagSearch");
-    let p = tagBar.querySelector('#tags');
-    let innerHTML = p.innerHTML;
-    let temp = innerHTML.split(",");
-    if(tag ==="Choose a tag" ){
-        
-    }
-    else if(temp.length === 2){
-        alert("You can only have two Tags");
-    }else{
-        console.log(tag);
-        let tagBar = document.getElementById("tagSearch");
-        let p = tagBar.querySelector('#tags');
-        let html = p.innerHTML;
-        //console.log(tag);
-        let arr = tag.split("::");
-        console.log(arr);
-        if(html===""){
-            html+= ""+tag+"";
-        }else{
-            html+= ","+tag+"";
-        }
-        p.innerHTML = html;
-    }
-}
+
 
 function buildFilteredTable() {
     let tag = document.querySelector("#quizTagsSelect").value;

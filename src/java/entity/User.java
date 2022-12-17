@@ -2,12 +2,11 @@ package entity;
 public class User {
     private String username;
     private String password;
-    private String permissionLevel;
+    private String permissionLevel = "USER";
 
-    public User(String username, String password, String permissionLevel){
+    public User(String username, String password){
         this.username = username;
         this.password = password;
-        this.permissionLevel = permissionLevel;
     }
 
     public String getUsername()
