@@ -169,6 +169,8 @@ function filterTableByTitle() {
     let regex =  new RegExp(userTitleInput);
     let filteredArray = allQuizzes.filter( quiz => regex.test(quiz.quizTitle));
     buildTableBody(filteredArray);
+    document.querySelector("#userTitleInput").value = "";
+
 }
 
 
