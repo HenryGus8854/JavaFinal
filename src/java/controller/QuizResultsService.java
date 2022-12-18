@@ -5,9 +5,8 @@
 package controller;
 
 import com.google.gson.Gson;
-import db.QuizAccessor;
 import db.QuizResultAccessor;
-import entity.Quiz;
+
 import entity.QuizResult;
 
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -91,7 +91,17 @@ public class QuizResultsService extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            Scanner sc = new Scanner(request.getReader());
+            String jsonData = sc.nextLine();
+            Gson g = new Gson();
+            QuizResult quizRes = g.fromJson(jsonData, QuizResult.class);
+           boolean success = QuizResultAccessor.insertQuizResult(quizRes);
+            out.println(success);
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

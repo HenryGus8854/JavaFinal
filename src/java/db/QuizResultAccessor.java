@@ -37,6 +37,7 @@ public class QuizResultAccessor {
         if (conn != null)
             try{
                 selectAllStatement = conn.prepareStatement("select * from quizresult");
+                insertStatement = conn.prepareStatement("insert into QUIZRESULTS values (?,?,?,?,?,?,?,?)");
                 return true;
             }catch(SQLException ex){
                 System.err.println("************************");
@@ -96,5 +97,39 @@ public class QuizResultAccessor {
         return allQuizResults;
     }
 
-    
+    public static boolean insertQuizResult(QuizResult result) throws SQLException{
+        boolean res;
+        if(!init()) return false;
+        ResultSet rs;
+        try{
+            init();
+            insertStatement.setString(1, result.getResultID());
+            insertStatement.setString(2, result.getQuiz().getQuizID());
+            insertStatement.setString(3, result.getUser().getUsername());
+            insertStatement.setString(4, result.getQuizStartTime());
+            insertStatement.setString(5, result.getQuizEndTime());
+            List<Number> temp=result.getUserAnswers();
+            
+            String str= "";
+            for(int i =0; i<temp.size();i++){
+                if(i == temp.size()-1)
+                    str+=temp.get(i);
+                else
+                    str+=temp.get(i) + "|";
+            }
+            
+            insertStatement.setString(6,str );
+            insertStatement.setInt(7, result.getScoreNumerator());
+            insertStatement.setInt(8, result.getScoreDenominator());
+            int rowCount = insertStatement.executeUpdate();
+            res = (rowCount == 1);
+        } catch(SQLException ex){
+            System.err.println("************************");
+            System.err.println("** Error retreiving Employees");
+            System.err.println("** " + ex.getMessage());
+            System.err.println("************************");
+            return false;
+        }
+        return res;
+    }
 }
