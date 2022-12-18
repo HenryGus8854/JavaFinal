@@ -82,6 +82,12 @@ public class UserAccessor {
         }
         return false;
     }
+
+    public static User getUserByUsername (String username) throws SQLException {
+        ArrayList<User> allUsers = getAllUsers();
+
+        return allUsers.stream().filter(user -> user.getUsername().equals(username)).findFirst().get();
+    }
     
     
     public static boolean ValidateUser(User user) throws SQLException{
