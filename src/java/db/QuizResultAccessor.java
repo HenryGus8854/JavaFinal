@@ -37,7 +37,7 @@ public class QuizResultAccessor {
         if (conn != null)
             try{
                 selectAllStatement = conn.prepareStatement("select * from quizresult");
-                insertStatement = conn.prepareStatement("insert into QUIZRESULTS values (?,?,?,?,?,?,?,?)");
+                insertStatement = conn.prepareStatement("insert into QUIZRESULT values (?,?,?,?,?,?,?,?)");
                 return true;
             }catch(SQLException ex){
                 System.err.println("************************");
@@ -94,6 +94,7 @@ public class QuizResultAccessor {
             System.err.println("** " + ex.getMessage());
             System.err.println("************************");
         }
+        System.out.println(allQuizResults.toString());
         return allQuizResults;
     }
 

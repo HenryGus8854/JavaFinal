@@ -13,7 +13,7 @@ function getAllQuizResults() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let resp = xmlhttp.responseText;
-            //console.log(resp);
+            console.log(resp);
             if (resp.search("ERROR") >= 0) {
                 alert("oh no, something is wrong with getting quiz results");
             } else {
