@@ -15,8 +15,6 @@
          
          String username =  request.getParameter("username");
 
-            HttpSession session = request.getSession();
-
             session.setAttribute("user", username);
          
          RequestDispatcher rd = request.getRequestDispatcher("./quizzesPage.html");

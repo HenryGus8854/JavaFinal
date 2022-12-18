@@ -7,8 +7,6 @@ package controller;
 import com.google.gson.Gson;
 import db.UserAccessor;
 import entity.User;
-import javafx.print.Printer;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -105,7 +103,7 @@ public class UserService extends HttpServlet {
                     User temp = gson.fromJson(jsonData, User.class);
                     
                     User user = UserAccessor.validateUser(temp) ? temp : null;
-
+                    System.out.println(user);
                     HttpSession session = request.getSession();
                     assert user != null;
                     session.setAttribute("user", user.getUsername());

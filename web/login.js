@@ -26,7 +26,7 @@ function validateUser(user) {
             } else {
                 alert(" request completed successfully");
                 console.log(resp);
-                window.location.href = `createSession.jsp?username=${user.username}`;
+                //window.location.href = `createSession.jsp?username=${user.username}`;
             }
 
         console.log(resp);
