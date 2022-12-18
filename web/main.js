@@ -1,5 +1,5 @@
 let allQuizzes =[];
-let userobj;
+let username =null;
 let quizBeingTaken;
 var globalVariable={
        quizBeingTaken: quizBeingTaken
@@ -15,25 +15,21 @@ window.onload = function () {
     }else{
         document.querySelector("#refresh").addEventListener("click", getAllQuizes);
         document.querySelector("#searchByTagButton").addEventListener("click", filterTableByTitle);
-
-        getUser();
-        getAllQuizes();
+        confirmUser();
     }
     
 };
-function getUser(){
-    let url = "account/user"; // file name or server-side process name
+function confirmUser() {
+    let url = "UserService/users";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            let resp = xmlhttp.responseText;
-            console.log("-->"+resp);
-            if (resp.search("ERROR") >= 0) {
-                alert("Something is wrong with the GET.");
+            let resp = xmlhttp.responseText.trim();
+            if (resp === "null") {
+                window.location.href="loginPage.html";
             } else {
-                userobj=resp;
-                //pagePermission(userobj);
-                //console.log(typeof userobj)
+                console.log(resp);
+                username = resp;
                 getAllQuizes();
                 adjustNavbar();
             }
@@ -42,18 +38,15 @@ function getUser(){
     };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+
 }
 function adjustNavbar(){
     let thenav = document.querySelector("#changer");
     let html = thenav.innerHTML;
-    let user = JSON.parse(userobj);
-    if(user.permissionLevel === "GUEST"){
+    if(username=== null){
         html += "<li class=\"nav-item\">\n" +
                     "<a class=\"nav-link active\" aria-current=\"page\" href=\"loginPage.html\">Log In</a>\n" +
-                "</li>\n" +
-                "<li class=\"nav-item\">\n" +
-                    "<a class=\"nav-link\" href=\"signupPage.php\">Sign Up</a>\n" +
-                "</li>";
+                "</li>\n";
     }else{
         html += "<li class=\"nav-item\">\n" +
                     "<a class=\"nav-link active\" aria-current=\"page\" href=\"quizResults.html\">Quiz Results</a>\n" +
@@ -61,14 +54,8 @@ function adjustNavbar(){
                 "<li class=\"nav-item\">\n" +
                     "<a class=\"nav-link active\" href='' aria-current=\"page\" onclick='logout()'>Logout</a>\n" +
                 "</li>\n";
-                if(user.permissionLevel === "ADMIN")
-                {
-                    html +="<li class=\"nav-item\">\n" +
-                        "<a class=\"nav-link active\" aria-current=\"page\" href=\"HomePages/AdminHomePage.php\">Admin Homepage</a>\n" +
-                        "</li>\n";
-                }
         html +="<li class=\"nav-item\">\n" +
-                    "<a class=\"nav-link\" aria-current=\"page\">"+user.username.toLocaleUpperCase()+"</a>\n" +
+                    "<a class=\"nav-link\" aria-current=\"page\">"+username+"</a>\n" +
                 "</li>";
 
     }
@@ -76,7 +63,7 @@ function adjustNavbar(){
 }
 
 function logout(){
-    let url = "account/user"; // file name or server-side process name
+    let url = "UserService/users"; // file name or server-side process name
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
@@ -85,13 +72,13 @@ function logout(){
             if (resp.search("ERROR") >= 0) {
                 alert("Something is wrong with the Logout.");
             } else {
-                window.location.replace("http://localhost/Projects/Final_Project/index.php");
+                window.location.href("loginPage.html");
             }
 
         }
     };
     console.log(url);
-    xmlhttp.open("DELETE", url, true);
+    xmlhttp.open("POST", url, true);
     xmlhttp.send();
 
 }

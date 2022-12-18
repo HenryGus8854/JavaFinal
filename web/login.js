@@ -24,18 +24,19 @@ function validateUser(user) {
                 alert("could not complete login request");
                 console.log(resp);
             } else {
-                alert(" request completed successfully");
                 console.log(resp);
-                //window.location.href = `createSession.jsp?username=${user.username}`;
+                window.location.href = "index.html";
             }
 
-        console.log(resp);
+        //console.log(resp);
         }
     };
     xmlhttp.open("PUT", url, true);
     xmlhttp.send(JSON.stringify(user));
 
 }
+
+
 
 function GrabAllAnswers() {
     let answer = [];

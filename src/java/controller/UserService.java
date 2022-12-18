@@ -7,7 +7,7 @@ package controller;
 import com.google.gson.Gson;
 import db.UserAccessor;
 import entity.User;
-import javafx.print.Printer;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -64,7 +64,14 @@ public class UserService extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        try (PrintWriter out = response.getWriter()){
+            HttpSession session = request.getSession();
+            String username = (String)session.getAttribute("user");
+            out.print(username);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -77,7 +84,13 @@ public class UserService extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+        try (PrintWriter out = response.getWriter()){
+            HttpSession session = request.getSession();
+            session.removeAttribute("user");
+            out.print(true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -119,7 +132,6 @@ public class UserService extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-
 
 
     /**
