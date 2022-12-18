@@ -16,7 +16,6 @@ window.onload = function () {
         document.querySelector("#refresh").addEventListener("click", getAllQuizes);
         getUser();
         getAllQuizes();
-        getCatergories();
     }
     
 };
@@ -153,73 +152,13 @@ function buildTable(text) {
     console.log(allQuizzes);
 
     theTable.innerHTML = html;
-    document.querySelector(".takeQuiz").addEventListener("click",takeQuiz);
-    
+    document.querySelectorAll(".takeQuiz").forEach(element=>element.addEventListener("click",takeQuiz));
 }
 
 
 
-function buildFilteredTable() {
-    let tag = document.querySelector("#quizTagsSelect").value;
-    alert(tag);
-}
-function getQuizzesByTag(){
 
-    let tagBar = document.getElementById("tagSearch");
-    let p = tagBar.querySelector('#tags');
-    let html = p.innerHTML;
-    p.innerHTML= "";
-    //console.log(html);
-    let arr = html.split(',');
-    console.log(arr.length);
-    console.log(arr);
-    let url = "quizapp/quizzes/search:tags=";
-    
-    //This if else checks if Tags have been selected 
-    //And Then checks if there are mutiple tags 
-    //And makes a differ query based on the amout of tags
-    if(arr.length === 1 && arr[0]===""){
-        alert("Please select Some Tags");
-    }else if(arr.length>1){
-        for(let i=0; i<arr.length;i++){
-            url+=arr[i]+",";
-        }
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                let resp = xmlhttp.responseText;
-                console.log(resp);
-                if (resp.search("ERROR") >= 0) {
-                    alert("oh no, something is wrong with the GET ...");
-                } else {
-                    buildTable(resp);
-                }
-            }
-        };
-        console.log(url);
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }else {
-        url+=arr[0]+"";
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                let resp = xmlhttp.responseText;
-                console.log(resp);
-                if (resp.search("ERROR") >= 0) {
-                    alert("oh no, something is wrong with the GET ...");
-                } else {
-                    
-                    buildTable(resp);
-                }
-            }
-        };
-        console.log(url);
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-    
-}
+
 
 
 function takeQuiz(e){
