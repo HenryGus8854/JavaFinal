@@ -86,7 +86,7 @@ insert into permission values ('SUPER');
 -- QuizAppUser
 insert into QuizAppUser values ('smonk','smonk','SUPER');
 insert into QuizAppUser values ('super1','super1','SUPER');
-insert into QuizAppUser values ('admin1','admin','ADMIN');
+insert into QuizAppUser values ('admin1','admin1','ADMIN');
 insert into QuizAppUser values ('Apoc','Apoc1234','USER');
 insert into QuizAppUser values ('Cypher','Cypher1234','USER');
 insert into QuizAppUser values ('Dozer','Dozer1234','USER');
