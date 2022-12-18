@@ -36,7 +36,7 @@ public class QuizResultAccessor {
         conn = ConnectionManager.getConnection(ConnectionParameters.URL, ConnectionParameters.USERNAME, ConnectionParameters.PASSWORD);
         if (conn != null)
             try{
-                selectAllStatement = conn.prepareStatement("select * from quizresult");
+                 selectAllStatement = conn.prepareStatement("select * from quizresult ORDER BY resultID");
                 insertStatement = conn.prepareStatement("insert into QUIZRESULT values (?,?,?,?,?,?,?,?)");
                 return true;
             }catch(SQLException ex){
