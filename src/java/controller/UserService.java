@@ -112,7 +112,7 @@ public class UserService extends HttpServlet {
                         user = null;
 
                     out.println(gson.toJson(user));
-                   // out.println(UserAccessor.validateUser(user));
+                    // out.println(UserAccessor.validateUser(user));
                 }
             }
         } catch (SQLException e) {
