@@ -187,8 +187,8 @@ function clearTable(){
 
 function buildTableBody(allQuizzes) {
     clearTable();
-    let tbody = document.querySelector("tbody");
-    let html = "";
+    let theTable = document.querySelector("table");
+    let html = theTable.querySelector("tr").innerHTML;
 
     for (let quiz of allQuizzes) {
         html += `<tr id="${quiz.quizID}">`;
@@ -198,8 +198,8 @@ function buildTableBody(allQuizzes) {
             html += `<td><form action='quiz/takeQuiz.php'><input type='hidden' name='quizID' value='${quiz.quizID}'><button class='btn btn-outline-success takeQuiz'>Take quiz</button></form></td>`;
         html += `</tr>`;
     }
-    console.log(allQuizzes);
-    tbody.innerHTML = html;
+    console.log(theTable);
+    theTable.innerHTML = html;
     document.querySelector(".takeQuiz").addEventListener("click",takeQuiz);
 }
 

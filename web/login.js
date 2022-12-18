@@ -20,16 +20,35 @@ function validateUser(user) {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let resp = xmlhttp.responseText.trim();
-            if (resp.search("ERROR") >= 0 || resp !== "true") {
+            if (resp === "null") {
                 alert("could not complete login request");
                 console.log(resp);
             } else {
                 alert(" request completed successfully");
                 console.log(resp);
+                window.location.href = `createSession.jsp?username=${user.username}`;
             }
+
+        console.log(resp);
         }
     };
     xmlhttp.open("PUT", url, true);
     xmlhttp.send(JSON.stringify(user));
 
+}
+
+function GrabAllAnswers() {
+    let answer = [];
+    let allQuestionCards = document.querySelectorAll("#mainContainer .container");
+
+    for (let question of allQuestionCards) {
+        let radioButtons = question.querySelectorAll("input");
+
+        for (let i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].checked)
+                answer.push(i);
+        }
+    }
+
+    return answer;
 }
