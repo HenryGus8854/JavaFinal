@@ -1,22 +1,26 @@
 
 window.onload = function () {
-    // will only work in the index page
-    // if (window.location.href.indexOf("index") > -1)
-    //     document.querySelector("#logInButton").addEventListener("click", login);
-    //password checking on sign up
-//    if(window.location.href.indexOf("login")> -1){
-//        document.querySelector("#searchByTagButton").addEventListener("click", getQuizzesByTag);
-//        document.querySelector("#loginButton").addEventListener("change", login);
-//    }else{
-//        document.querySelector("#refresh").addEventListener("click", getAllQuizes);
-//        getUser();
-//        getAllQuizes();
-//        getCatergories();
-//    }
-
-//console.log(quizBeingTaken);
-    alert(globalVariable.quizBeingTaken);
+    getCurrentQuiz();
 };
+
+function getCurrentQuiz(){
+    let url = "CurrentQuiz"; // file name or server-side process name
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let resp = xmlhttp.responseText;
+            console.log("-->"+resp);
+            if (resp.search("ERROR") >= 0) {
+                alert("Something is wrong with the GET.");
+            } else {
+                
+            }
+
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
 function getUser(){
     let url = "account/user"; // file name or server-side process name
     let xmlhttp = new XMLHttpRequest();

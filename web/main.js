@@ -247,11 +247,30 @@ let url = "CurrentQuiz"; // file name or server-side process name
             if (resp.search("ERROR") >= 0) {
                 alert("Something is wrong with the GET.");
             } else {
+               window.location.href= "quizPage.html";
+            }
+
+        }
+    };
+    xmlhttp.open("POST", url, true);
+    xmlhttp.send(JSON.stringify(quizBeingTaken));
+}
+
+function getCurrentQuiz(){
+    let url = "CurrentQuiz"; // file name or server-side process name
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let resp = xmlhttp.responseText;
+            console.log("-->"+resp);
+            if (resp.search("ERROR") >= 0) {
+                alert("Something is wrong with the GET.");
+            } else {
                 
             }
 
         }
     };
     xmlhttp.open("GET", url, true);
-    xmlhttp.send(quizBeingTaken);
+    xmlhttp.send();
 }

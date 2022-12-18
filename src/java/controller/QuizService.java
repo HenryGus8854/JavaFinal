@@ -54,10 +54,10 @@ public class QuizService extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        System.out.println("Triggered");
+        //System.out.println("Triggered");
         try (PrintWriter out = response.getWriter()) {
             List<Quiz> allQuizzes= QuizAccessor.getAllQuizzes();
-            System.out.println(allQuizzes);
+            //System.out.println(allQuizzes);
             Gson g = new Gson();
             out.println(g.toJson(allQuizzes));
         } catch (SQLException ex) {

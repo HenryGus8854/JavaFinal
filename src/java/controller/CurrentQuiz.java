@@ -57,7 +57,12 @@ public class CurrentQuiz extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        
+        try (PrintWriter out = response.getWriter()) {
+        HttpSession session = request.getSession();
+        Quiz curQuiz = (Quiz)session.getAttribute("currentQuiz");
+         Gson g = new Gson();
+        out.println(g.toJson(curQuiz));
+        }
     }
 
     /**
@@ -76,19 +81,17 @@ public class CurrentQuiz extends HttpServlet {
             HttpSession session = request.getSession();
             Scanner sc = new Scanner(request.getReader());
             String jsonData = sc.nextLine(); // payload is a single string
-            
+            System.out.println(jsonData);
             Gson g = new Gson();
             Quiz quiz = g.fromJson(jsonData, Quiz.class);
-            System.out.println(quiz);
+            
             session.setAttribute("currentQuiz", quiz);    
-        String path = "/takeQuiz.html";
-        
-
-
-        RequestDispatcher rd = request.getRequestDispatcher(path);
-        rd.forward(request, response);   
+            
             boolean success = true;
             out.println(success);
+        }catch(Exception ex){
+            PrintWriter out = response.getWriter();
+            out.println(ex.getMessage());
         }
     }
 
