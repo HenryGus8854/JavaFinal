@@ -4,12 +4,13 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="main.js"></script>
+    <script src="login.js"></script>
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
 <body class="bg-light">
 <h1 class="p-3 m-3 text-center">Hello there! Please, log in or create an account</h1>
-<form class="container border rounded p-5 bg-white w-50" method="post" action="./LoginService">
+<form class="container border rounded p-5 bg-white w-50" id="loginForm" method="post" action="./LoginService">
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input name="username" type="text" class="form-control w-75" id="username" aria-describedby="emailHelp" required>

@@ -1,8 +1,7 @@
 package entity;
 public class User {
-    private String username;
-    private String password;
-    private String permissionLevel = "USER";
+    private final String username;
+    private final String password;
 
     public User(String username, String password){
         this.username = username;
@@ -21,6 +20,6 @@ public class User {
 
     public String getPermissionLevel()
     {
-        return permissionLevel;
+        return "USER";
     }
 }

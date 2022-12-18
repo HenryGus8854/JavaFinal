@@ -3,14 +3,14 @@ package entity;
 import java.util.List;
 
 public class QuizResult {
-    private String resultID;
-    private Quiz quiz;
-    private User user; // 
-    private List<Number> answers; //int[]
-    private String startTime;
-    private String endTime;
-    private int scoreNumerator;
-    private int scoreDenominator;
+    private final String resultID;
+    private final Quiz quiz;
+    private final User user; //
+    private final List<Number> answers; //int[]
+    private final String startTime;
+    private final String endTime;
+    private final int scoreNumerator;
+    private final int scoreDenominator;
 
     public QuizResult(String resultID, Quiz quiz, User user, List<Number> answers,String startTime, String endTime, int scoreNumerator, int scoreDenominator) {
         this.resultID = resultID;

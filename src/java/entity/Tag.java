@@ -2,9 +2,9 @@
 package entity;
 
 public class Tag {
-    private int tagID;
-    private String tagName;
-    private String tagCategory;
+    private final int tagID;
+    private final String tagName;
+    private final String tagCategory;
 
     public Tag(int tagID, String tagName, String tagCategory) {
         this.tagID = tagID;

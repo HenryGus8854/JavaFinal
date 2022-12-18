@@ -4,35 +4,39 @@
  */
 package db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import entity.Quiz;
 import entity.Question;
-import db.QuestionAccessor;
+import entity.Quiz;
+import entity.QuizResult;
 import entity.User;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizAccessor {
+/**
+ *
+ * @author dudua
+ */
+public class QuizResultAccessor {
+
     private static Connection conn = null;
     private static PreparedStatement selectAllStatement = null;
     private static PreparedStatement pointsStatement = null;
     private static PreparedStatement insertStatement = null;
     private static PreparedStatement updateStatement = null;
-    
-    private QuizAccessor(){}
-    
+
+    private QuizResultAccessor(){}
+
     private static boolean init() throws SQLException {
-        if (conn != null)
-            return true;    
+        if (conn != null) return true;
+
         conn = ConnectionManager.getConnection(ConnectionParameters.URL, ConnectionParameters.USERNAME, ConnectionParameters.PASSWORD);
         if (conn != null)
             try{
-                selectAllStatement = conn.prepareStatement("select * from quiz");
-                pointsStatement = conn.prepareStatement("select points from QuizQuestion where quizID = ?");
+                selectAllStatement = conn.prepareStatement("select * from quizresult");
                 return true;
             }catch(SQLException ex){
                 System.err.println("************************");
@@ -43,11 +47,11 @@ public class QuizAccessor {
             }
         return false;
     }
-    
-    public static List<Quiz> getAllQuizzes() throws SQLException{
-        List<Quiz> quizzes = new ArrayList();
-        if(!init())
-            return quizzes;
+
+    public static ArrayList<QuizResult> getAllQuizResults() throws SQLException{
+        ArrayList<QuizResult> allQuizResults = new ArrayList<>();
+        if(!init()) return allQuizResults;
+
         ResultSet rs;
         try{
             rs = selectAllStatement.executeQuery();
@@ -56,17 +60,31 @@ public class QuizAccessor {
             System.err.println("** Error retreiving Employees");
             System.err.println("** " + ex.getMessage());
             System.err.println("************************");
-            return quizzes;
+            return allQuizResults;
         }
-        QuestionAccessor questionAcc = new QuestionAccessor();
+
         try {
             while (rs.next()) {
+
+                String resultID = rs.getString("resultID");
                 String quizID = rs.getString("quizID");
-                String quizTitle = rs.getString("quizTitle");
-                List<Question> questions = questionAcc.getQuestionsForQuiz(quizID);
-                List<Number> points = getPointsForQuiz(quizID);
-                Quiz  quiz = new Quiz(quizID, quizTitle, questions, points);
-                quizzes.add(quiz);
+                String username = rs.getString("username");
+                String[] userAnswers = rs.getString("userAnswers").split("\\|"); //TODO: recheck this part again
+                String quizStartTime = rs.getString("quizStartTime");
+                String quizEndTime = rs.getString("quizEndTime");
+                int scoreNumerator = rs.getInt("scoreNumerator");
+                int scoreDenominator = rs.getInt("scoreDenominator");
+
+                Quiz quiz = QuizAccessor.getQuizByID(quizID);
+                User user = UserAccessor.getUserByUsername(username);
+                List<Number> answers = new ArrayList<>();
+
+                for (String answer : userAnswers) {
+                    answers.add(Integer.parseInt(answer));
+                }
+
+                QuizResult quizResult = new QuizResult(resultID, quiz, user, answers, quizStartTime, quizEndTime, scoreNumerator, scoreDenominator);
+                allQuizResults.add(quizResult);
             }
             System.out.println("TRIGGERED");
         } catch (SQLException ex) {
@@ -75,32 +93,8 @@ public class QuizAccessor {
             System.err.println("** " + ex.getMessage());
             System.err.println("************************");
         }
-        return quizzes;
+        return allQuizResults;
     }
 
-    public static Quiz getQuizByID (String id) throws SQLException {
-        List<Quiz> quizzes = getAllQuizzes();
-
-        return quizzes.stream().filter(user -> user.getQuizID().equals(id)).findFirst().get();
-    }
     
-    private static List<Number> getPointsForQuiz(String quizID)throws SQLException{
-        List<Number> points = new ArrayList();
-         ResultSet rs;
-        try{
-            init();
-            pointsStatement.setString(1,quizID);
-            rs =  pointsStatement.executeQuery();
-            while(rs.next()){
-                points.add(rs.getInt("points"));
-            }
-        }catch(SQLException ex){
-            System.err.println("************************");
-            System.err.println("** Error retreiving Employees");
-            System.err.println("** " + ex.getMessage());
-            System.err.println("************************");
-            return points; 
-        }
-        return points;
-    }
 }
