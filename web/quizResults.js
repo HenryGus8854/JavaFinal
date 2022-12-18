@@ -1,11 +1,74 @@
 let allQuizResults = [];
-
+let username = null;
 window.onload = function () {
     getAllQuizResults();
     document.querySelector("#refresh").addEventListener("click", getAllQuizResults);
     document.querySelector("#searchByTagButton").addEventListener("click", filterTableByTitle);
-
+    confirmUser();
 };
+
+function confirmUser() {
+    let url = "UserService/users";
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let resp = xmlhttp.responseText.trim();
+            if (resp === "null") {
+                window.location.href="loginPage.html";
+            } else {
+                username = resp;
+                adjustNavbar();
+            }
+
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+
+}
+
+function logout(){
+    let url = "UserService/users"; // file name or server-side process name
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let resp = xmlhttp.responseText;
+            console.log("-->"+resp);
+            if (resp.search("ERROR") >= 0) {
+                alert("Something is wrong with the Logout.");
+            } else {
+                window.location.href("loginPage.html");
+            }
+
+        }
+    };
+    console.log(url);
+    xmlhttp.open("POST", url, true);
+    xmlhttp.send();
+
+}
+
+function adjustNavbar(){
+    let thenav = document.querySelector("#changer");
+    let html = thenav.innerHTML;
+    if(username=== null){
+        html += "<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link active\" aria-current=\"page\" href=\"loginPage.html\">Log In</a>\n" +
+                "</li>\n";
+    }else{
+        html +="<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link active\" href='' aria-current=\"page\" onclick='logout()'>Logout</a>\n" +
+                "</li>\n";
+        html +="<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" aria-current=\"page\">"+username+"</a>\n" +
+                "</li>";
+
+    }
+    thenav.innerHTML=html;
+}
+
+
+
 
 function getAllQuizResults() {
     let url = "quizzes/results"; // file name or server-side process name
@@ -13,7 +76,7 @@ function getAllQuizResults() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let resp = xmlhttp.responseText;
-            console.log(resp);
+            //console.log(resp);
             if (resp.search("ERROR") >= 0) {
                 alert("oh no, something is wrong with getting quiz results");
             } else {

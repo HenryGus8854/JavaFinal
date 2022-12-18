@@ -8,13 +8,9 @@ window.onload = function () {
     getNumberOfResults();
 }
 function getTime(){
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-
-    console.log(dateTime);
-    return dateTime;
+    var time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log(time);
+    return time;
 }
 
 function adjustNavbar(){
@@ -173,6 +169,7 @@ function makeQuizResult(){
     else{
         let counter = 0;
         let quizID="QR-1"+(numOfResults+1); 
+        
         let user = {
             "username": username,
             "password": "dummy"

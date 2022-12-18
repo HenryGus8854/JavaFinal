@@ -37,7 +37,7 @@ public class QuizResultAccessor {
         if (conn != null)
             try{
                  selectAllStatement = conn.prepareStatement("select * from quizresult ORDER BY resultID");
-                insertStatement = conn.prepareStatement("insert into QUIZRESULT values (?,?,?,?,?,?,?,?)");
+                insertStatement = conn.prepareStatement("insert into quizresult values (?,?,?,?,?,?,?,?)");
                 return true;
             }catch(SQLException ex){
                 System.err.println("************************");
@@ -126,7 +126,7 @@ public class QuizResultAccessor {
             res = (rowCount == 1);
         } catch(SQLException ex){
             System.err.println("************************");
-            System.err.println("** Error retreiving Employees");
+            System.err.println("** Error Inserting QUiz Result");
             System.err.println("** " + ex.getMessage());
             System.err.println("************************");
             return false;
